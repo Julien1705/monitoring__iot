@@ -1,20 +1,30 @@
 <?php
-require "./treatment/connexionBdd.php";
+require "../connexionBdd.php";
 
 
-if (!$_POST) {
-    $req = $db->prepare("SELECT `measured_value`, `name_module` FROM `historique` WHERE `id_module`=1");
-    $req->execute([]);
+$mode = $_GET['mode'];
 
-    $data = $req->fetchAll(PDO::FETCH_ASSOC);
+$select = [];
 
-    $name_module = $data[0]["name_module"];
+$req = $db->prepare("SELECT `measured_value`, `name_module` FROM `historique` WHERE `id_module`=:id");
+$req->execute([
+    "id" => $mode
+]);
 
-    $data_value = [];
-    $label = [];
+$data = $req->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($data as $value) {
-        array_push($data_value, $value["measured_value"]);
-        array_push($label, "");
-    }
+
+$data_value = [];
+$label = [];
+
+foreach ($data as $value) {
+    array_push($data_value, $value["measured_value"]);
+    array_push($label, "");
 }
+
+$select["DATA_VALUES"] = $data_value;
+$select["LABELS"] = $label;
+
+echo json_encode($select);
+exit(0);
+
