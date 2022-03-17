@@ -1,12 +1,13 @@
 <?php
 require "../connexionBdd.php";
 
-// Sélectionne tous les ID des modules
+// Récupére tous les ID des modules
 $req = $db->prepare("SELECT id FROM module");
 $req->execute();
 
 $allIdModules = $req->fetchAll(PDO::FETCH_ASSOC);
 
+//Mise en place de la simulation pour chaque module
 foreach ($allIdModules as $IdModule) {
     $sql = "SELECT * FROM `module` WHERE `id` = :id";
     $req = $db->prepare($sql);
@@ -44,6 +45,9 @@ foreach ($allIdModules as $IdModule) {
         $temperature += 1;
     }else{
         $temperature -= 1;
+        if ($temperature <= 20) {
+            $temperature += 2;
+        }
     }
 
     if ($temperature > 50) {
@@ -52,6 +56,7 @@ foreach ($allIdModules as $IdModule) {
         $state = 1;
     }
 
+    // Mise a jour du module apres une simulation
     $sql2 = "UPDATE `module` SET `current_measured_value`= :current_measured_value ,`operating_time`= :operating_time ,`number_of_data_sent`= :number_of_data_sent ,`temperature`= :temperature ,`state`= :state WHERE `id` = :id";
     $req2 = $db->prepare($sql2);
     $req2->execute([
@@ -63,6 +68,7 @@ foreach ($allIdModules as $IdModule) {
         "id" => $IdModule["id"]
     ]);
 
+    // Insertion des données récupérées apres la simulation dans la base de données
     $sql3 = "INSERT INTO `historique`(`id_module`,`name_module`, `measured_value`, `temperature`, `date`) VALUES (:id_module, :name_module,:measured_value,:temperature,CURRENT_TIMESTAMP)";
     $req3 = $db->prepare($sql3);
     $req3->execute([

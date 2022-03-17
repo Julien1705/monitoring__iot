@@ -29,31 +29,34 @@ include "view/nav.php";
 </div>
 
 <script>
-    graphique_evolution_contact($('#module').val());
+    //appel de l'affichage de la fonction affichage du graphique selon la valeur par default
+    graphique_evolution_valeur_mesuree($('#module').val());
 
+    //detection du changement de la valeur du select et appel de la fonction affichage du graphique selon la valeur 
     $('#module').change(function() {
         $mode = $('#module').val();
-        graphique_evolution_contact($mode);
+        graphique_evolution_valeur_mesuree($mode);
     });
 
-    function graphique_evolution_contact($mode) {
+    // fonction affichage du graphique
+    function graphique_evolution_valeur_mesuree($mode) {
         $.ajax({
             url: 'treatment/requeteSql/dataGraph.php',
             data: 'mode=' + $mode,
             dataType: 'json',
             async: false,
             success: function(data) {
-                var $periodicite = data.LABELS;
-                var $nb_inscrit = data.DATA_VALUES;
+                var $labels = data.LABELS;
+                var $data_values = data.DATA_VALUES;
 
-                var $visitorsChart = $('#module-chart')
+                var $moduleChart = $('#module-chart')
                 // eslint-disable-next-line no-unused-vars
-                var visitorsChart = new Chart($visitorsChart, {
+                var moduleChart = new Chart($moduleChart, {
                     data: {
-                        labels: $periodicite,
+                        labels: $labels,
                         datasets: [{
                             type: 'line',
-                            data: $nb_inscrit,
+                            data: $data_values,
                             backgroundColor: 'transparent',
                             borderColor: '#007bff',
                             pointBorderColor: '#007bff',
