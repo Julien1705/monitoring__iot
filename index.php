@@ -7,7 +7,7 @@ include "view/nav.php";
 
 <div class="container">
     <h1 class="text-center">Modules IOT</h1>
-    <a href="treatment/requeteSql/simulation.php" class="btn btn-warning">Simulation</a>
+    <a href="treatment/requeteSql/simulation.php" class="btn btn-warning" id="btn_simulation">Simulation</a>
     <div id="donnee">
         <div class="row mt-3">
             <?php while ($result = $req->fetch()) : ?>
@@ -56,6 +56,8 @@ include "view/nav.php";
     const simulationBtn = document.querySelector("a[href='treatment/requeteSql/simulation.php']");
     const stopBtn = document.createElement("button");
 
+    
+
                                     
     const SIMULATION = () => {
         $.get("treatment/requeteSql/simulation.php");
@@ -64,7 +66,9 @@ include "view/nav.php";
     //Appel de la simulation au click du bouton
     simulationBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        simulationBtn.innerHTML = "Simulation en cours...";
+
+        $("#btn_simulation").hide();
+        $("#btn_arret").show();
 
         // appel de la fonction simulation toutes les secondes
         const simu = setInterval(SIMULATION, 1000);
@@ -77,17 +81,19 @@ include "view/nav.php";
 
         // Creation du bouton STOP
         stopBtn.setAttribute("onclick", `stopSimulation(${simu})`);
-        stopBtn.classList.add("btn", "btn-danger", "m-3");
-        stopBtn.innerHTML = "Stop";
+        stopBtn.setAttribute("id", "btn_arret");
+        stopBtn.classList.add("btn", "btn-danger");
+        stopBtn.innerHTML = "Stop simulation";
         $(stopBtn).insertAfter(simulationBtn);
 
     });
 
     // fonction d'arret de simulation
     function stopSimulation(simu) {
+        $("#btn_simulation").show();
+        $("#btn_arret").hide();
         clearInterval(simu);
         clearInterval(auto_refresh);
-        simulationBtn.innerHTML = "Lancer La Simulation";
     }
 </script>
 

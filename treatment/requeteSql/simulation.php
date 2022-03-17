@@ -25,7 +25,7 @@ foreach ($allIdModules as $IdModule) {
     $state = $result["state"];
 
     $randForMeasure = rand(0,1);
-    $randForTemperature = rand(0,1);
+    $randForTemperature = rand(0,2);
     $randForDataSent = rand(5,15);
 
     $operating_time += 1;
@@ -41,7 +41,7 @@ foreach ($allIdModules as $IdModule) {
         }
     }
 
-    if ($randForTemperature) {
+    if ($randForTemperature != 0) {
         $temperature += 1;
     }else{
         $temperature -= 1;

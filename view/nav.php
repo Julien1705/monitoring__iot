@@ -11,7 +11,7 @@
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="addModule.php">Add a module</a>
+                    <a class="nav-link" href="addModule.php">Ajout d'un module</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php">Dashboard</a>
